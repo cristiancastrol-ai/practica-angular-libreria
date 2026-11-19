@@ -1,0 +1,30 @@
+<main class="tarjeta">
+  <header class="encabezado">
+    <p class="sucursal">Sucursal N.º {{ numeroSucursal }}</p>
+    <h1>{{ nombreTienda }}</h1>
+    <p class="encargado">Atendido por {{ encargado }}</p>
+  </header>
+
+  <p class="estado" [class.abierto]="tiendaAbierta" [class.cerrado]="!tiendaAbierta">
+    {{ tiendaAbierta ? 'Tienda abierta' : 'Tienda cerrada' }}
+  </p>
+
+  <section class="bloque">
+    <h2>Categorías</h2>
+    <ul class="categorias">
+      @for (categoria of categorias; track categoria) {
+        <li>{{ categoria }}</li>
+      }
+    </ul>
+  </section>
+
+  <section class="bloque producto">
+    <h2>Producto destacado</h2>
+    <h3>{{ producto.nombre }}</h3>
+    <p class="precio">Bs {{ producto.precio }}</p>
+
+    <p class="estado" [class.abierto]="producto.disponible" [class.cerrado]="!producto.disponible">
+      {{ producto.disponible ? 'Producto disponible' : 'Producto agotado' }}
+    </p>
+  </section>
+</main>
