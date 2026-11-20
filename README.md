@@ -99,6 +99,5 @@ Capturas en `entrega/capturas/`:
 
 ## Respuestas teóricas
 
-En [`entrega/RESPUESTAS.md`](entrega/RESPUESTAS.md) y
-[`entrega/RESPUESTAS.pdf`](entrega/RESPUESTAS.pdf) están las respuestas a las cinco
+En [`entrega/RESPUESTAS.md`](entrega/RESPUESTAS.md) están las respuestas a las cinco
 preguntas de la práctica.
