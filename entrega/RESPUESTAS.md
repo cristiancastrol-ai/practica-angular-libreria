@@ -49,6 +49,9 @@ textos y sería más fácil cometer errores.
 
 ## Evidencia de la prueba de funcionamiento
 
+La página incluye un **Panel de la práctica · paso 3** con botones que aplican estos
+mismos cambios en vivo, sin tocar el código.
+
 | Cambio realizado | Resultado en la página |
 |---|---|
 | `tiendaAbierta` de `true` a `false` | Se muestra "Tienda cerrada" |

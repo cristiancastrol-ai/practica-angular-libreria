@@ -1,30 +1,210 @@
-<main class="tarjeta">
-  <header class="encabezado">
-    <p class="sucursal">Sucursal N.º {{ numeroSucursal }}</p>
-    <h1>{{ nombreTienda }}</h1>
-    <p class="encargado">Atendido por {{ encargado }}</p>
-  </header>
+<header class="barra">
+  <div class="marca">
+    <svg class="logo" viewBox="0 0 40 40" aria-hidden="true">
+      <rect x="4" y="3" width="32" height="34" rx="4" fill="none" stroke="currentColor" stroke-width="2.2" />
+      <path d="M13 3v13l4-3 4 3V3" fill="currentColor" />
+      <g stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.55">
+        <line x1="10" y1="24" x2="30" y2="24" />
+        <line x1="10" y1="29" x2="30" y2="29" />
+        <line x1="10" y1="34" x2="23" y2="34" />
+      </g>
+    </svg>
+    <span class="marca-nombre">{{ nombreTienda }}</span>
+  </div>
 
-  <p class="estado" [class.abierto]="tiendaAbierta" [class.cerrado]="!tiendaAbierta">
-    {{ tiendaAbierta ? 'Tienda abierta' : 'Tienda cerrada' }}
-  </p>
+  <div class="acciones">
+    <button
+      class="pildora"
+      [class.cerrada]="!tiendaAbierta"
+      (click)="cambiarEstadoTienda()"
+      [attr.aria-pressed]="tiendaAbierta"
+      title="Cambiar el estado de la tienda"
+    >
+      <span class="punto"></span>
+      {{ tiendaAbierta ? 'Tienda abierta' : 'Tienda cerrada' }}
+    </button>
 
-  <section class="bloque">
-    <h2>Categorías</h2>
-    <ul class="categorias">
-      @for (categoria of categorias; track categoria) {
-        <li>{{ categoria }}</li>
+    <button class="boton-carrito" (click)="carritoAbierto.set(true)" aria-label="Abrir carrito">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M4 7h16l-1.4 12.2a2 2 0 0 1-2 1.8H7.4a2 2 0 0 1-2-1.8L4 7Z" />
+        <path d="M9 9V6a3 3 0 0 1 6 0v3" />
+      </svg>
+      <span class="texto-carrito">Carrito</span>
+      @if (unidades() > 0) {
+        <span class="cuenta">{{ unidades() }}</span>
       }
-    </ul>
+    </button>
+  </div>
+</header>
+
+<main class="contenedor">
+  <section class="hero">
+    <div class="hero-texto">
+      <p class="sobrelinea">Sucursal N.º {{ numeroSucursal }} · La Paz</p>
+      <h1>{{ nombreTienda }}</h1>
+      <p class="bajada">
+        Cuadernos, tintas y mochilas para quienes escriben, dibujan y planean. Atendido por
+        {{ encargado }}.
+      </p>
+
+      <ul class="categorias" aria-label="Filtrar por categoría">
+        <li>
+          <button
+            class="chip"
+            [class.activo]="categoriaActiva() === 'Todas'"
+            (click)="filtrar('Todas')"
+          >
+            Todas
+          </button>
+        </li>
+        @for (categoria of categorias; track categoria) {
+          <li>
+            <button
+              class="chip"
+              [class.activo]="categoriaActiva() === categoria"
+              (click)="filtrar(categoria)"
+            >
+              {{ categoria }}
+            </button>
+          </li>
+        }
+      </ul>
+
+      @if (!tiendaAbierta) {
+        <p class="nota-cerrado">
+          Ahora estamos cerrados: puedes mirar la vitrina, pero no reservar.
+        </p>
+      }
+    </div>
+
+    <aside class="destacado" aria-label="Producto destacado">
+      <div class="portada-grande" [class.verde]="productoDemo">
+        <span class="cinta">Producto destacado</span>
+        <span class="portada-marca">El Cuadernito</span>
+        <span class="portada-titulo">{{ producto.nombre }}</span>
+        <span class="portada-precio">Bs {{ producto.precio }}</span>
+      </div>
+      <div class="destacado-pie">
+        <p
+          class="estado"
+          [class.abierto]="producto.disponible"
+          [class.cerrado]="!producto.disponible"
+        >
+          {{ producto.disponible ? 'Producto disponible' : 'Producto agotado' }}
+        </p>
+        <p class="destacado-nota">Hecho a mano en la sucursal {{ numeroSucursal }}.</p>
+      </div>
+    </aside>
   </section>
 
-  <section class="bloque producto">
-    <h2>Producto destacado</h2>
-    <h3>{{ producto.nombre }}</h3>
-    <p class="precio">Bs {{ producto.precio }}</p>
+  <section class="vitrina" aria-label="Catálogo">
+    <div class="vitrina-cabecera">
+      <h2>La vitrina</h2>
+      <p class="conteo">{{ visibles().length }} artículos</p>
+    </div>
 
-    <p class="estado" [class.abierto]="producto.disponible" [class.cerrado]="!producto.disponible">
-      {{ producto.disponible ? 'Producto disponible' : 'Producto agotado' }}
+    <div class="grilla">
+      @for (articulo of visibles(); track articulo.id) {
+        <article class="ficha">
+          <div class="tapa" [style.background]="articulo.portada" [style.color]="articulo.tinta">
+            <span class="tapa-marca">El Cuadernito</span>
+            <span class="tapa-nombre">{{ articulo.nombre }}</span>
+          </div>
+          <div class="ficha-cuerpo">
+            <p class="etiqueta">{{ articulo.categoria }}</p>
+            <h3>{{ articulo.nombre }}</h3>
+            <p class="detalle">{{ articulo.detalle }}</p>
+            <div class="ficha-pie">
+              <p class="precio-chico">Bs {{ articulo.precio }}</p>
+              @if (articulo.disponible) {
+                <button class="boton-agregar" (click)="agregar(articulo)">Añadir</button>
+              } @else {
+                <span class="agotado">Agotado</span>
+              }
+            </div>
+          </div>
+        </article>
+      } @empty {
+        <p class="sin-articulos">No hay artículos en esta categoría todavía.</p>
+      }
+    </div>
+  </section>
+
+  <details class="practica">
+    <summary>Panel de la práctica · paso 3</summary>
+    <p class="practica-nota">
+      Estos botones cambian los datos de <code>app.ts</code> en vivo, como pide la consigna.
     </p>
-  </section>
+    <div class="practica-botones">
+      <button (click)="cambiarEstadoTienda()">tiendaAbierta = {{ tiendaAbierta }}</button>
+      <button (click)="cambiarDisponibilidad()">
+        producto.disponible = {{ producto.disponible }}
+      </button>
+      <button (click)="agregarCategoriaDemo()" [disabled]="categoriaDemo">
+        Agregar 4.ª categoría
+      </button>
+      <button (click)="cambiarProductoDemo()">Cambiar nombre y precio</button>
+    </div>
+  </details>
 </main>
+
+<footer class="pie">
+  <p>{{ nombreTienda }} · Sucursal {{ numeroSucursal }} · Atendido por {{ encargado }}</p>
+  <p class="pie-nota">Práctica de Angular — catálogo y datos de ejemplo.</p>
+</footer>
+
+@if (carritoAbierto()) {
+  <div class="telon" (click)="carritoAbierto.set(false)"></div>
+  <aside class="panel" role="dialog" aria-modal="true" aria-label="Carrito de compras">
+    <header class="panel-cabecera">
+      <h2>Tu carrito</h2>
+      <button class="cerrar" (click)="carritoAbierto.set(false)" aria-label="Cerrar carrito">
+        ×
+      </button>
+    </header>
+
+    @if (carrito().length === 0) {
+      <div class="panel-vacio">
+        <p>Aún no hay nada aquí.</p>
+        <p class="detalle">Añade un cuaderno y vuelve.</p>
+      </div>
+    } @else {
+      <ul class="lineas">
+        @for (linea of carrito(); track linea.articulo.id) {
+          <li class="linea">
+            <span class="mini" [style.background]="linea.articulo.portada"></span>
+            <div class="linea-info">
+              <p class="linea-nombre">{{ linea.articulo.nombre }}</p>
+              <p class="linea-precio">Bs {{ linea.articulo.precio }}</p>
+            </div>
+            <div class="cantidad">
+              <button (click)="cambiarCantidad(linea.articulo.id, -1)" aria-label="Quitar uno">
+                −
+              </button>
+              <span>{{ linea.cantidad }}</span>
+              <button (click)="cambiarCantidad(linea.articulo.id, 1)" aria-label="Añadir uno">
+                +
+              </button>
+            </div>
+          </li>
+        }
+      </ul>
+
+      <footer class="panel-pie">
+        <div class="total">
+          <span>Total</span>
+          <strong>Bs {{ total() }}</strong>
+        </div>
+        <button class="reservar" (click)="reservar()">Reservar pedido</button>
+        <button class="vaciar" (click)="vaciar()">Vaciar carrito</button>
+      </footer>
+    }
+  </aside>
+}
+
+@if (aviso(); as mensaje) {
+  <div class="toast" role="status">
+    <span>{{ mensaje }}</span>
+    <button (click)="cerrarAviso()" aria-label="Cerrar aviso">×</button>
+  </div>
+}

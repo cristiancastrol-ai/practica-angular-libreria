@@ -1,11 +1,12 @@
 # Práctica Angular — Librería El Cuadernito 📓
 
-Práctica de Angular: presentación de un producto de una tienda, en este caso una
-librería sencilla.
+Práctica de Angular: presentación de un producto de una tienda. En este caso, una
+librería con catálogo, filtros y carrito.
 
-El proyecto muestra los datos de la tienda, el estado (abierta/cerrada), la lista de
-categorías y una tarjeta con el producto destacado, incluyendo su precio y si está
-disponible o agotado.
+La página muestra los datos de la tienda, su estado (abierta/cerrada), las categorías,
+el producto destacado y una vitrina con seis artículos. Además es interactiva: se puede
+filtrar por categoría, añadir productos al carrito, cambiar cantidades y reservar un
+pedido.
 
 ## Requisitos
 
@@ -36,7 +37,7 @@ El resultado queda en `dist/practica-angular-libreria/`.
 
 ```
 src/app/
-├── app.ts      → interfaz Producto, clase App y datos de la tienda
+├── app.ts      → interfaz Producto, clase App, datos y lógica
 ├── app.html    → plantilla con {{ }}, @if y @for
 └── app.css     → estilos del componente
 ```
@@ -45,35 +46,59 @@ src/app/
 
 - Interfaz `Producto` declarada **antes** de `@Component`.
 - Clase `App` con `nombreTienda`, `encargado`, `numeroSucursal`, `tiendaAbierta` y
-  `categorias`.
+  `categorias`, tal como pide la consigna.
 - Objeto `producto` que cumple la interfaz.
+- Catálogo extra, carrito y filtros hechos con `signal`, `computed` y `update`.
 
 ### `app.html`
 
-- Nombre de la tienda e info del encargado y la sucursal.
+- Nombre de la tienda, encargado y sucursal.
 - Mensaje **Tienda abierta / Tienda cerrada** con `@if`.
-- Categorías en lista con `@for`.
+- Categorías en lista con `@for` (funcionan como filtros).
 - Nombre, precio y estado del producto (**Producto disponible / Producto agotado**).
+- Vitrina con `@for` y estado vacío con `@empty`.
+- Carrito lateral con `@if`, cantidades y total.
+
+## Interactividad
+
+| Acción | Resultado |
+|---|---|
+| Clic en una categoría | Filtra la vitrina al instante |
+| Clic en la píldora de estado | Abre/cierra la tienda (con aviso) |
+| Clic en **Añadir** | Suma el artículo al carrito y muestra un aviso |
+| Clic en el carrito | Abre el panel con líneas, cantidades y total |
+| **+ / −** | Cambia cantidades y recalcula el total |
+| **Reservar pedido** | Vacía el carrito y confirma la reserva |
+| **Panel de la práctica** | Aplica en vivo los cambios del paso 3 |
 
 ## Prueba de funcionamiento (paso 3)
 
-Se hicieron los cuatro cambios pedidos y se verificó que la página los refleja:
+El panel **Panel de la práctica · paso 3** tiene botones que hacen exactamente los
+cuatro cambios pedidos:
 
-| Cambio | Resultado |
-|---|---|
-| `tiendaAbierta = false` | Se muestra **Tienda cerrada** |
-| `producto.disponible = false` | Se muestra **Producto agotado** |
-| Se agrega una cuarta categoría | Aparece **Cartucheras** en la lista |
-| Se cambia nombre y precio | Se muestra **Cuaderno cosido B6 — Bs 42** |
+| Cambio | Resultado esperado | Verificado |
+|---|---|---|
+| `tiendaAbierta = false` | Se muestra **Tienda cerrada** | ✅ |
+| `producto.disponible = false` | Se muestra **Producto agotado** | ✅ |
+| Se agrega una cuarta categoría | Aparece **Cartucheras** en la lista | ✅ |
+| Se cambia nombre y precio | **Cuaderno cosido B6 — Bs 42** | ✅ |
+
+Además se hicieron **36 comprobaciones automatizadas** con Chrome (clics reales sobre
+filtros, carrito, cantidades, reserva, cierre de tienda, panel y vista móvil):
+36/36 correctas, sin errores en consola y sin desborde horizontal a 390 px.
 
 Capturas en `entrega/capturas/`:
 
-- `01-inicial.png` — estado original
-- `02-cambios.png` — con los cuatro cambios aplicados
-- `03-movil.png` — vista responsive (390 px)
-- `04-final.png` — estado final restaurado
+- `01-inicio.png` — página completa
+- `02-filtro.png` — filtro por categoría
+- `03-carrito.png` — carrito abierto con dos productos
+- `04-cerrada.png` — tienda cerrada y aviso al intentar añadir
+- `05-panel.png` — panel de la práctica con los cambios aplicados
+- `06-escritorio.png` — estado final en escritorio
+- `07-movil.png` — vista responsive a 390 px
 
 ## Respuestas teóricas
 
-En [`entrega/RESPUESTAS.md`](entrega/RESPUESTAS.md) están las respuestas a las cinco
+En [`entrega/RESPUESTAS.md`](entrega/RESPUESTAS.md) y
+[`entrega/RESPUESTAS.pdf`](entrega/RESPUESTAS.pdf) están las respuestas a las cinco
 preguntas de la práctica.
