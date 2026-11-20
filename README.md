@@ -61,27 +61,27 @@ src/app/
 
 ## Interactividad
 
-| Acción | Resultado |
-|---|---|
-| Clic en una categoría | Filtra la vitrina al instante |
-| Clic en la píldora de estado | Abre/cierra la tienda (con aviso) |
-| Clic en **Añadir** | Suma el artículo al carrito y muestra un aviso |
-| Clic en el carrito | Abre el panel con líneas, cantidades y total |
-| **+ / −** | Cambia cantidades y recalcula el total |
-| **Reservar pedido** | Vacía el carrito y confirma la reserva |
-| **Panel de la práctica** | Aplica en vivo los cambios del paso 3 |
+| Acción                       | Resultado                                      |
+| ---------------------------- | ---------------------------------------------- |
+| Clic en una categoría        | Filtra la vitrina al instante                  |
+| Clic en la píldora de estado | Abre/cierra la tienda (con aviso)              |
+| Clic en **Añadir**           | Suma el artículo al carrito y muestra un aviso |
+| Clic en el carrito           | Abre el panel con líneas, cantidades y total   |
+| **+ / −**                    | Cambia cantidades y recalcula el total         |
+| **Reservar pedido**          | Vacía el carrito y confirma la reserva         |
+| **Panel de la práctica**     | Aplica en vivo los cambios del paso 3          |
 
 ## Prueba de funcionamiento (paso 3)
 
 El panel **Panel de la práctica · paso 3** tiene botones que hacen exactamente los
 cuatro cambios pedidos:
 
-| Cambio | Resultado esperado | Verificado |
-|---|---|---|
-| `tiendaAbierta = false` | Se muestra **Tienda cerrada** | ✅ |
-| `producto.disponible = false` | Se muestra **Producto agotado** | ✅ |
-| Se agrega una cuarta categoría | Aparece **Cartucheras** en la lista | ✅ |
-| Se cambia nombre y precio | **Cuaderno cosido B6 — Bs 42** | ✅ |
+| Cambio                         | Resultado esperado                  | Verificado |
+| ------------------------------ | ----------------------------------- | ---------- |
+| `tiendaAbierta = false`        | Se muestra **Tienda cerrada**       | ✅         |
+| `producto.disponible = false`  | Se muestra **Producto agotado**     | ✅         |
+| Se agrega una cuarta categoría | Aparece **Cartucheras** en la lista | ✅         |
+| Se cambia nombre y precio      | **Cuaderno cosido B6 — Bs 42**      | ✅         |
 
 Además se hicieron **36 comprobaciones automatizadas** con Chrome (clics reales sobre
 filtros, carrito, cantidades, reserva, cierre de tienda, panel y vista móvil):

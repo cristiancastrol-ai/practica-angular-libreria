@@ -1,14 +1,10 @@
 import { Component, computed, signal } from '@angular/core';
 
-// Interfaz que define la forma de un producto de la tienda.
-// Debe declararse antes del decorador @Component.
 export interface Producto {
   nombre: string;
   precio: number;
   disponible: boolean;
 }
-
-// Artículo del catálogo: extiende Producto con datos solo visuales.
 interface Articulo extends Producto {
   id: number;
   categoria: string;
@@ -29,21 +25,16 @@ interface LineaCarrito {
   styleUrl: './app.css',
 })
 export class App {
-  // --- Datos de la tienda (los de la práctica) ---
   nombreTienda: string = 'Librería El Cuadernito';
   encargado: string = 'Cristian Castro Lima';
   numeroSucursal: number = 3;
   tiendaAbierta: boolean = true;
   categorias: string[] = ['Cuadernos', 'Bolígrafos', 'Mochilas'];
-
-  // Producto destacado: cumple con la interfaz Producto
   producto: Producto = {
     nombre: 'Cuaderno artesanal A5',
     precio: 35,
     disponible: true,
   };
-
-  // --- Catálogo (extra para que la página tenga vida) ---
   readonly catalogo: Articulo[] = [
     {
       id: 1,
@@ -106,8 +97,6 @@ export class App {
       tinta: '#fbece6',
     },
   ];
-
-  // --- Estado de la interfaz ---
   readonly categoriaActiva = signal<string>('Todas');
   readonly carrito = signal<LineaCarrito[]>([]);
   readonly carritoAbierto = signal(false);
@@ -126,24 +115,15 @@ export class App {
   );
 
   readonly total = computed(() =>
-    this.carrito().reduce(
-      (total, linea) => total + linea.articulo.precio * linea.cantidad,
-      0,
-    ),
+    this.carrito().reduce((total, linea) => total + linea.articulo.precio * linea.cantidad, 0),
   );
-
-  // --- Panel de la práctica (paso 3) ---
   categoriaDemo: boolean = false;
   productoDemo: boolean = false;
 
   private temporizador?: ReturnType<typeof setTimeout>;
-
-  // --- Acciones ---
   cambiarEstadoTienda(): void {
     this.tiendaAbierta = !this.tiendaAbierta;
-    this.avisar(
-      this.tiendaAbierta ? 'Tienda abierta de nuevo.' : 'Tienda cerrada (demostración).',
-    );
+    this.avisar(this.tiendaAbierta ? 'Tienda abierta de nuevo.' : 'Tienda cerrada (demostración).');
   }
 
   cambiarDisponibilidad(): void {
@@ -182,9 +162,7 @@ export class App {
       const existente = lineas.find((linea) => linea.articulo.id === articulo.id);
       if (existente) {
         return lineas.map((linea) =>
-          linea.articulo.id === articulo.id
-            ? { ...linea, cantidad: linea.cantidad + 1 }
-            : linea,
+          linea.articulo.id === articulo.id ? { ...linea, cantidad: linea.cantidad + 1 } : linea,
         );
       }
       return [...lineas, { articulo, cantidad: 1 }];
@@ -214,7 +192,9 @@ export class App {
     const total = this.total();
     this.carrito.set([]);
     this.carritoAbierto.set(false);
-    this.avisar(`Pedido reservado por Bs ${total}. Te esperamos en la sucursal ${this.numeroSucursal}.`);
+    this.avisar(
+      `Pedido reservado por Bs ${total}. Te esperamos en la sucursal ${this.numeroSucursal}.`,
+    );
   }
 
   cerrarAviso(): void {
